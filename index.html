@@ -2,76 +2,41 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Roleta Criativa - Gire e Ganhe!</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 60px;
-    }
-    #formulario {
-      margin-bottom: 20px;
-    }
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 8px;
-      width: 300px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-    }
-    .resultado {
-      font-size: 24px;
-      color: green;
-      margin-top: 30px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roleta da Arte Grátis</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Roleta Criativa - Gire e Ganhe!</h1>
-  <p>Preencha antes de girar:</p>
-  <div id="formulario">
-    <input type="text" id="nome1" placeholder="Participante 1">
-    <input type="text" id="nome2" placeholder="Participante 2">
-    <input type="text" id="nome3" placeholder="Participante 3">
-    <input type="text" id="nome4" placeholder="Participante 4">
-    <input type="text" id="nome5" placeholder="Participante 5">
-  </div>
-  <button onclick="girarRoleta()">Girar Roleta</button>
+  <header>
+    <h1>Roleta da Arte Grátis</h1>
+    <p>Participe do sorteio e concorra a uma arte totalmente gratuita para seu projeto!</p>
+  </header>
 
-  <div class="resultado" id="resultado"></div>
+  <section class="formulario">
+    <form id="sorteioForm">
+      <input type="text" name="nome" placeholder="Seu nome" required>
+      <input type="email" name="email" placeholder="Seu e-mail" required>
+      <input type="text" name="instagram" placeholder="@seuInstagram" required>
+      <select name="arte" required>
+        <option value="">Escolha o tipo de arte</option>
+        <option value="Flyer">Flyer</option>
+        <option value="Cartão de visita">Cartão de visita</option>
+        <option value="Post Instagram">Post Instagram</option>
+        <option value="Logo">Logo</option>
+      </select>
+      <button type="submit">Participar</button>
+    </form>
+  </section>
 
-  <script>
-    let ganhadores = [];
+  <section class="roleta">
+    <h2>Confira a roleta ao vivo no dia do sorteio!</h2>
+    <img src="https://i.imgur.com/4ZzRf5J.png" alt="Imagem ilustrativa da roleta" width="300">
+  </section>
 
-    function girarRoleta() {
-      const nomes = [
-        document.getElementById("nome1").value,
-        document.getElementById("nome2").value,
-        document.getElementById("nome3").value,
-        document.getElementById("nome4").value,
-        document.getElementById("nome5").value
-      ].filter(nome => nome.trim() !== "");
+  <footer>
+    <p>© 2025 - Desenvolvido por Adonai | Campanha para portfólio</p>
+  </footer>
 
-      if (nomes.length === 0) {
-        alert("Preencha pelo menos um nome para sortear!");
-        return;
-      }
-
-      let candidatos = nomes.filter(nome => !ganhadores.includes(nome));
-
-      if (candidatos.length === 0) {
-        document.getElementById("resultado").innerText = "Todos já foram sorteados!";
-        return;
-      }
-
-      const sorteado = candidatos[Math.floor(Math.random() * candidatos.length)];
-      ganhadores.push(sorteado);
-
-      document.getElementById("resultado").innerText = `Ganhador: ${sorteado}`;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
