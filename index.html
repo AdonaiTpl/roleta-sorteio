@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Roleta Criativa - Sorteio</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; }
+    h1 { color: #333; }
+    canvas { margin: 20px auto; display: block; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+    .winner-list, .formulario { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    .formulario input { display: block; width: 90%; margin: 10px auto; padding: 10px; font-size: 16px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Roleta Criativa - Gire e Ganhe!</h1>
+
+  <div class="formulario">
+    <h2>Preencha antes de girar:</h2>
+    <input type="text" id="nome" placeholder="Seu nome" required>
+    <input type="text" id="instagram" placeholder="Seu @instagram" required>
+    <input type="email" id="email" placeholder="Seu email" required>
+    <input type="text" id="whatsapp" placeholder="Seu WhatsApp" required>
+    <button onclick="validarFormulario()">Girar Roleta</button>
+  </div>
+
+  <canvas id="canvas" width="500" height="500"></canvas>
+
+  <div class="winner-list">
+    <h2>Ganhadores</h2>
+    <ul id="ganhadores"></ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/winwheel@2.7.0/Winwheel.min.js"></script>
+  <script>
+    const premios = [
+      "Flyer Personalizado",
+      "Cartão de Visita",
+      "Post para Instagram",
+      "Cardápio Digital",
+      "Arte Surpresa"
+    ];
+
+    let premiosDisponiveis = [...premios];
+    let ganhadores = [];
+
+    const roleta = new Winwheel({
+      numSegments: premiosDisponiveis.length,
+      outerRadius: 200,
+      segments: premiosDisponiveis.map(p => ({ text: p })),
+      animation: {
+        type: 'spinToStop',
+        duration: 5,
+        spins: 8,
+        callbackFinished: premioGanho
+      }
+    });
+
+    function validarFormulario() {
+      const nome = document.getElementById('nome').value.trim();
+      const instagram = document.getElementById('instagram').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+
+      if (!nome || !instagram || !email || !whatsapp) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+      }
+      girarRoleta(nome, instagram);
+    }
+
+    function girarRoleta(nome, instagram) {
+      if (premiosDisponiveis.length === 0) {
+        alert('Todos os prêmios já foram sorteados.');
+        return;
+      }
+      roleta.animation.callbackFinished = function(indicado) {
+        premioGanho(indicado, nome, instagram);
+      };
+      roleta.startAnimation();
+    }
+
+    function premioGanho(indicado, nome, instagram) {
+      const premio = indicado.text;
+      alert("Parabéns, " + nome + "! Você ganhou: " + premio);
+      premiosDisponiveis = premiosDisponiveis.filter(p => p !== premio);
+      ganhadores.push({ nome, instagram, premio });
+      atualizarGanhadores();
+      atualizarRoleta();
+    }
+
+    function atualizarGanhadores() {
+      const ul = document.getElementById('ganhadores');
+      ul.innerHTML = '';
+      ganhadores.forEach((g, i) => {
+        const li = document.createElement('li');
+        li.textContent = `Ganhador ${i + 1}: ${g.nome} (${g.instagram}) - ${g.premio}`;
+        ul.appendChild(li);
+      });
+    }
+
+    function atualizarRoleta() {
+      roleta.segments = premiosDisponiveis.map(p => ({ text: p }));
+      roleta.numSegments = premiosDisponiveis.length;
+      roleta.draw();
+    }
+  </script>
+</body>
+</html>
