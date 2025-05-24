@@ -2,108 +2,75 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Roleta Criativa - Sorteio</title>
+  <title>Roleta Criativa - Gire e Ganhe!</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; }
-    h1 { color: #333; }
-    canvas { margin: 20px auto; display: block; }
-    button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-top: 20px; }
-    .winner-list, .formulario { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
-    .formulario input { display: block; width: 90%; margin: 10px auto; padding: 10px; font-size: 16px; }
-    .hidden { display: none; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+    }
+    #formulario {
+      margin-bottom: 20px;
+    }
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 8px;
+      width: 300px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    .resultado {
+      font-size: 24px;
+      color: green;
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
   <h1>Roleta Criativa - Gire e Ganhe!</h1>
-
-  <div class="formulario">
-    <h2>Preencha antes de girar:</h2>
-    <input type="text" id="nome" placeholder="Seu nome" required>
-    <input type="text" id="instagram" placeholder="Seu @instagram" required>
-    <input type="email" id="email" placeholder="Seu email" required>
-    <input type="text" id="whatsapp" placeholder="Seu WhatsApp" required>
-    <button onclick="validarFormulario()">Girar Roleta</button>
+  <p>Preencha antes de girar:</p>
+  <div id="formulario">
+    <input type="text" id="nome1" placeholder="Participante 1">
+    <input type="text" id="nome2" placeholder="Participante 2">
+    <input type="text" id="nome3" placeholder="Participante 3">
+    <input type="text" id="nome4" placeholder="Participante 4">
+    <input type="text" id="nome5" placeholder="Participante 5">
   </div>
+  <button onclick="girarRoleta()">Girar Roleta</button>
 
-  <canvas id="canvas" width="500" height="500"></canvas>
+  <div class="resultado" id="resultado"></div>
 
-  <div class="winner-list">
-    <h2>Ganhadores</h2>
-    <ul id="ganhadores"></ul>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/winwheel@2.7.0/Winwheel.min.js"></script>
   <script>
-    const premios = [
-      "Flyer Personalizado",
-      "Cartão de Visita",
-      "Post para Instagram",
-      "Cardápio Digital",
-      "Arte Surpresa"
-    ];
-
-    let premiosDisponiveis = [...premios];
     let ganhadores = [];
 
-    const roleta = new Winwheel({
-      numSegments: premiosDisponiveis.length,
-      outerRadius: 200,
-      segments: premiosDisponiveis.map(p => ({ text: p })),
-      animation: {
-        type: 'spinToStop',
-        duration: 5,
-        spins: 8,
-        callbackFinished: premioGanho
-      }
-    });
+    function girarRoleta() {
+      const nomes = [
+        document.getElementById("nome1").value,
+        document.getElementById("nome2").value,
+        document.getElementById("nome3").value,
+        document.getElementById("nome4").value,
+        document.getElementById("nome5").value
+      ].filter(nome => nome.trim() !== "");
 
-    function validarFormulario() {
-      const nome = document.getElementById('nome').value.trim();
-      const instagram = document.getElementById('instagram').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const whatsapp = document.getElementById('whatsapp').value.trim();
-
-      if (!nome || !instagram || !email || !whatsapp) {
-        alert('Por favor, preencha todos os campos.');
+      if (nomes.length === 0) {
+        alert("Preencha pelo menos um nome para sortear!");
         return;
       }
-      girarRoleta(nome, instagram);
-    }
 
-    function girarRoleta(nome, instagram) {
-      if (premiosDisponiveis.length === 0) {
-        alert('Todos os prêmios já foram sorteados.');
+      let candidatos = nomes.filter(nome => !ganhadores.includes(nome));
+
+      if (candidatos.length === 0) {
+        document.getElementById("resultado").innerText = "Todos já foram sorteados!";
         return;
       }
-      roleta.animation.callbackFinished = function(indicado) {
-        premioGanho(indicado, nome, instagram);
-      };
-      roleta.startAnimation();
-    }
 
-    function premioGanho(indicado, nome, instagram) {
-      const premio = indicado.text;
-      alert("Parabéns, " + nome + "! Você ganhou: " + premio);
-      premiosDisponiveis = premiosDisponiveis.filter(p => p !== premio);
-      ganhadores.push({ nome, instagram, premio });
-      atualizarGanhadores();
-      atualizarRoleta();
-    }
+      const sorteado = candidatos[Math.floor(Math.random() * candidatos.length)];
+      ganhadores.push(sorteado);
 
-    function atualizarGanhadores() {
-      const ul = document.getElementById('ganhadores');
-      ul.innerHTML = '';
-      ganhadores.forEach((g, i) => {
-        const li = document.createElement('li');
-        li.textContent = `Ganhador ${i + 1}: ${g.nome} (${g.instagram}) - ${g.premio}`;
-        ul.appendChild(li);
-      });
-    }
-
-    function atualizarRoleta() {
-      roleta.segments = premiosDisponiveis.map(p => ({ text: p }));
-      roleta.numSegments = premiosDisponiveis.length;
-      roleta.draw();
+      document.getElementById("resultado").innerText = `Ganhador: ${sorteado}`;
     }
   </script>
 </body>
