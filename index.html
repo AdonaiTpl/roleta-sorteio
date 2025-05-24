@@ -1,42 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Roleta da Arte Grátis</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>Roleta da Arte Grátis</h1>
-    <p>Participe do sorteio e concorra a uma arte totalmente gratuita para seu projeto!</p>
+    <p>Cadastre-se e gire a roleta para ganhar uma arte totalmente gratuita!</p>
   </header>
 
-  <section class="formulario">
-    <form id="sorteioForm">
-      <input type="text" name="nome" placeholder="Seu nome" required>
-      <input type="email" name="email" placeholder="Seu e-mail" required>
-      <input type="text" name="instagram" placeholder="@seuInstagram" required>
-      <select name="arte" required>
-        <option value="">Escolha o tipo de arte</option>
-        <option value="Flyer">Flyer</option>
-        <option value="Cartão de visita">Cartão de visita</option>
-        <option value="Post Instagram">Post Instagram</option>
-        <option value="Logo">Logo</option>
-      </select>
-      <button type="submit">Participar</button>
+  <section id="formulario">
+    <form id="inscricaoForm">
+      <input type="text" id="nome" placeholder="Seu nome" required>
+      <input type="email" id="email" placeholder="Seu e-mail" required>
+      <input type="text" id="instagram" placeholder="@seuInstagram" required>
+      <button type="submit">Participar e Girar</button>
     </form>
   </section>
 
-  <section class="roleta">
-    <h2>Confira a roleta ao vivo no dia do sorteio!</h2>
-    <img src="https://i.imgur.com/4ZzRf5J.png" alt="Imagem ilustrativa da roleta" width="300">
+  <section id="roletaSection" style="display:none;">
+    <canvas id="roletaCanvas" width="500" height="500"></canvas>
+    <button id="girarBtn">Girar Roleta</button>
   </section>
 
   <footer>
-    <p>© 2025 - Desenvolvido por Adonai | Campanha para portfólio</p>
+    <p>© 2025 - Desenvolvido por Adonai | Campanha de portfólio</p>
   </footer>
 
+  <script src="roleta.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
